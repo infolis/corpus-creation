@@ -8,12 +8,8 @@ class stpCommandCreator:
 
     algorithm = "io.github.infolis.algorithm.SearchTermPosition"
     phraseSlop = 0
-    jsonIn = ""
-    outputFile = ""
-    searchQueries = []
     
-    def __init__(self, jsonIn, outputFile):
-        self.jsonIn = jsonIn
+    def __init__(self, outputFile):
         self.outputFile = outputFile
         
     def writeToFile(self, commands):
@@ -21,13 +17,17 @@ class stpCommandCreator:
             for command in commands:
                 f.write(command)
             
-    def createCommand(self, searchTerms):
-        for term in searchTerms:
-            self.searchQueries.append(term)
+    def createCommand(self):
         return json.dumps({"algorithm":self.algorithm,\
-            "phraseSlop":self.phraseSlop,\
-            "searchQueries":self.searchQueries}, sort_keys=True, indent=4)
+            "phraseSlop":self.phraseSlop}, sort_keys=True, indent=4)
             
+class daraJsonParser:
+    """Class for parsing the json response of a dara solr query."""
+       
+    def __init__(self, jsonIn, csvOut):
+        self.jsonIn = jsonIn
+        self.csvOut = csvOut
+        
     def getDaraJson(self):
         return json.load(open(self.jsonIn, "r"))
         
@@ -40,9 +40,21 @@ class stpCommandCreator:
         for item in jsonGeneratorObj:
             titles.add("".join(item.get("title_en", "")))
             titles.add("".join(item.get("title_de", "")))
+        titles.remove("")
         return titles
+        
+    def writeCsv(self, data):
+        with open(self.csvOut, "w") as f:
+            f.write("\n".join(data).encode("utf-8"))
+            
+    def writeTitlesToCsv(self):
+        self.writeCsv(self.getTitleSet(self.parseDaraJson(self.getDaraJson())))
+        
     
 if __name__=="__main__":
-    c = stpCommandCreator("./dara_datasets_with_oecd.json",\
-    "./stpCmdDaraTitles.json")
-    c.writeToFile(c.createCommand(c.getTitleSet(c.parseDaraJson(c.getDaraJson()))))
+    parser = daraJsonParser("./dara_datasets_with_oecd.json",\
+    ".daraTitles.csv")
+    parser.writeTitlesToCsv()
+    
+    cc = stpCommandCreator("./stpCall.json")
+    cc.writeToFile(cc.createCommand())
