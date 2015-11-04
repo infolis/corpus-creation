@@ -1,0 +1,6 @@
+{
+    "header":"{http://www.openarchives.org/OAI/2.0/}header",
+    "metadata":"{http://www.openarchives.org/OAI/2.0/}metadata",
+    "identifier":"{http://www.openarchives.org/OAI/2.0/}identifier",
+    "prefix":"oai:gesis.izsoz.de:"
+}     
