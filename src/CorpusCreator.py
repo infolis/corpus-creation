@@ -5,6 +5,8 @@ import os
 import random
 import cPickle as pickle
 import sys
+import shutil
+import CreateLinks
 
 class CorpusCreator():
     """Class for creating a subcorpus of the given corpus. 
@@ -20,28 +22,29 @@ class CorpusCreator():
         
     def loadJson(self, jsonCommand):
         return json.load(open(jsonCommand, "r"))
-    ##unused
-    def copyNFiles(self, target, n):
-        """Copy a specified number of n files to target."""
-        for filename in os.listdir(self.source)[:n+1]:
-            shutil.copy(os.path.join(self.source, filename), target)
-    ##unused       
-    def copyFiles(self, target, filenames):
-        """Copy a list of filenames from corpus to target."""
-        for filename in filenames:
-            shutil.copy(os.path.join(self.source, filename), target)
-    ##unused        
-    def selectRandomFiles(self, n):
+         
+    def selectRandomFiles(self, filenames, n):
         """Create a sample of n randomly selected filenames."""
         selectedFilenames = set([])
-        filenames = os.listdir(self.source)
         # random choice may choose the same file multiple times
         # thus, do not perform choice operation n times but instead perform
         # operation until n filenames are selected
-        while len(selectedFilenames) < size:
-            selectedFilenames.add(os.path.join(self.source, random.choice(filenames)))
+        while len(selectedFilenames) < n:
+            selectedFilenames.add(random.choice(filenames))
         return selectedFilenames
+        
+    def sample(self, filenames):
+        """Create a sample specified size."""
+        return self.selectRandomFiles(filenames, int(self.config.get("sample").get("size")))
+        
+    def createLinks(self, filenames):
+        """Create symbolic links to the specified filenames"""
+        CreateLinks.create(self.config.get("createLinks").get("source"), filenames, self.config.get("createLinks").get("target"))      
     
+    def getValues(self, element):
+        """Return all tags found for element in the metadata"""
+        return self.metadata.get(element).keys()
+        
     def loadMetadata(self):
         """Unpickle metadata stored in picklePath."""
         pFile = open(self.config.get("picklePath"), "r")
@@ -88,14 +91,25 @@ class CorpusCreator():
 
 
 def usage():
-    print "CorpusCreator.py <jsonFile>"
+    print "usage: CorpusCreator.py <jsonFile>"
     
     
 if __name__=="__main__":
     try:
         creator = CorpusCreator(sys.argv[1])
+        selection = creator.select()
+        print "Found %d documents" %len(selection)
+        sample = selection
+        if creator.config.get("sample", False):
+            sample = creator.sample(selection)
+            print "Size of sample: %d" %len(sample)
+        if creator.config.get("createLinks", False):
+            creator.createLinks(sample)
+            print "Created %d links" %len(sample)
+        print sample 
+        #print creator.getValues("type_document")
     except IndexError:
-        usage
+        usage()
     
-    print len(creator.select())
+    
         
