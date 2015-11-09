@@ -3,22 +3,23 @@
 import subprocess
 import os
 
-def createLinks(filenames, target):
-    for filename in filenames:
-        subprocess.Popen(getCommand(filename), cwd=target)
-    return filenames
+def createLinks(filenameTuples, target):
+    for filenameTuple in filenameTuples:
+        subprocess.Popen(getCommand(filenameTuple[0], filenameTuple[1]), cwd=target)
+    return filenameTuples
         
-def getCommand(filename):
-    return ["ln", "-s", filename]
+def getCommand(name, linktarget):
+    return ["ln", "-s", linktarget, name]
     
-def getAbsoluteFilenames(filenames, root, rejectNonexisting):
+def getFilenameTuples(filenames, root, extensionToAdd, rejectNonexisting):
     if rejectNonexisting:
-        return [os.path.join(root, filename) for filename in filenames if os.path.exists(os.path.join(root, filename))]
+        return [(filename + extensionToAdd, os.path.join(root, filename + extensionToAdd)) for filename in filenames if os.path.exists(os.path.join(root, filename + extensionToAdd))]
     else:
-        return [os.path.join(root, filename) for filename in filenames]
+        return [(filename + extensionToAdd, os.path.join(root, filename + extensionToAdd)) for filename in filenames]
     
-def create(root, filenames, target, rejectNonexisting = True):
+def create(root, filenames, target, extensionToAdd = ".pdf", rejectNonexisting = True):
     """Create symbolic links to all files listed in filenames based at directory 
-    root in directory target. If rejectNonexisting is set, create only links to 
+    root in directory target. Extension extensionToAdd is added to all filenames. 
+    If rejectNonexisting is set, create only links to 
     existing files. Return a list of files for which links were created."""
-    return createLinks(getAbsoluteFilenames(filenames, root, rejectNonexisting), target)
+    return createLinks(getFilenameTuples(filenames, root, extensionToAdd, rejectNonexisting), target)

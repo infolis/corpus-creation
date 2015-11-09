@@ -43,7 +43,7 @@ class CorpusCreator():
         
     def createLinks(self, filenames):
         """Create symbolic links to the specified filenames"""
-        CreateLinks.create(self.config.get("createLinks").get("source"), filenames, self.config.get("createLinks").get("target"))      
+        return CreateLinks.create(self.config.get("createLinks").get("source"), filenames, self.config.get("createLinks").get("target"))      
     
     def getValues(self, element):
         """Return all tags found for element in the metadata"""
@@ -113,7 +113,7 @@ if __name__=="__main__":
                 print "Created %d links" %len(existingFiles)
             except TypeError:
                 print "Created 0 links" 
-        print "Documents in sample:", sample 
+        #print "Documents in sample:", sample 
         print "Existing documents for sample:", existingFiles
         #print creator.getValues("type_document")
     except IndexError:
