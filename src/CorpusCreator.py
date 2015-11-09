@@ -11,9 +11,9 @@ import CreateLinks
 class CorpusCreator():
     """Class for creating a subcorpus of the given corpus. 
     Features: 
-    1. retrieve list of documents having specified keywords
-    2. create sample of fixed size (random or arbitrary sample)
-    3. copy corresponding documents (metadata or pdf) to specified location
+    1. retrieve list of documents having specified metadata tags
+    2. create random sample of fixed size 
+    3. create symbolic links to documents (metadata or pdf) at specified location
     """
 
     def __init__(self, jsonCommand):

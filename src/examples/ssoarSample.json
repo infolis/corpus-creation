@@ -1,0 +1,21 @@
+{
+    "picklePath":"../ssoarMetadata.pickle",
+    "intersectionIntra":"False",
+    "intersectionInter":"True",
+    "select":
+        {
+            "subject_methods":["empirisch-quantitativ"],
+            "language_None":["de"],
+            "contributor_corporateeditor":["Deutsche Gesellschaft für Soziologie (DGS)"]
+        },
+    "sample":
+        {
+            "size":"100"
+        },
+    "createLinks":
+        {
+            "source":"../pdf",
+            "target":"../subsets/de_empirisch-quantitativ_dgs_100"
+        } 
+}
+    
