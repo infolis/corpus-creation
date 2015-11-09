@@ -25,6 +25,10 @@ class CorpusCreator():
          
     def selectRandomFiles(self, filenames, n):
         """Create a sample of n randomly selected filenames."""
+        if len(filenames) < n:
+            print "Warning: source set is smaller than desired sample."
+            print "Returning source set."
+            return filenames
         selectedFilenames = set([])
         # random choice may choose the same file multiple times
         # thus, do not perform choice operation n times but instead perform
@@ -104,9 +108,13 @@ if __name__=="__main__":
             sample = creator.sample(selection)
             print "Size of sample: %d" %len(sample)
         if creator.config.get("createLinks", False):
-            creator.createLinks(sample)
-            print "Created %d links" %len(sample)
-        print sample 
+            existingFiles = creator.createLinks(sample)
+            try:
+                print "Created %d links" %len(existingFiles)
+            except TypeError:
+                print "Created 0 links" 
+        print "Documents in sample:", sample 
+        print "Existing documents for sample:", existingFiles
         #print creator.getValues("type_document")
     except IndexError:
         usage()
