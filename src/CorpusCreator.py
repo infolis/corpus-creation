@@ -106,18 +106,15 @@ if __name__=="__main__":
         sample = selection
         if creator.config.get("sample", False):
             sample = creator.sample(selection)
-            print "Size of sample: %d" %len(sample)
         if creator.config.get("createLinks", False):
             existingFiles = creator.createLinks(sample)
             try:
                 print "Created %d links" %len(existingFiles)
             except TypeError:
                 print "Created 0 links" 
-        #print "Documents in sample:", sample 
-        print "Existing documents for sample:", existingFiles
-        #print creator.getValues("type_document")
+        print "Documents in sample:", sample 
+        print "Size of sample: %d" %len(sample)
+        
     except IndexError:
         usage()
-    
-    
         
