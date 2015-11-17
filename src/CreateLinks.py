@@ -13,9 +13,9 @@ def getCommand(name, linktarget):
     
 def getFilenameTuples(filenames, root, extensionToAdd, rejectNonexisting):
     if rejectNonexisting:
-        return [(filename + extensionToAdd, os.path.join(root, filename + extensionToAdd)) for filename in filenames if os.path.exists(os.path.join(root, filename + extensionToAdd))]
+        return [(filename + extensionToAdd, os.path.abspath(os.path.join(root, filename + extensionToAdd))) for filename in filenames if os.path.exists(os.path.join(root, filename + extensionToAdd))]
     else:
-        return [(filename + extensionToAdd, os.path.join(root, filename + extensionToAdd)) for filename in filenames]
+        return [(filename + extensionToAdd, os.path.abspath(os.path.join(root, filename + extensionToAdd))) for filename in filenames]
     
 def create(root, filenames, target, extensionToAdd = ".pdf", rejectNonexisting = True):
     """Create symbolic links to all files listed in filenames based at directory 
