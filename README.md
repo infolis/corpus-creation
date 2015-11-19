@@ -49,15 +49,18 @@ A json file like this can be used to specify the documents to select for creatin
         } 
 }
 ```
-For selecting documents, a picklePath must be given that points to the index file created by either econStorMetadataIndexer or ssoarMetadataIndexer. If the tags of one category are to be connected with boolean OR (meaning that documents having any of these tags should be selected), intersectionIntra should be set to False. Else, they will be connected with AND (meaning that only documents having all of these tags should be selected). Analogical, intersectionInter is used to define the connector of tags in different categories. If set to True, documents having a combination of the tags are selected, if set to False, all documents having any of the tags are selected. 
+```
+picklePath: location of the index file created by either econStorMetadataIndexer or ssoarMetadataIndexer, e.g. ./ssoarMetadata.pickle
+intersectionIntra: if the tags of one category are to be connected with boolean OR (meaning that documents having any of these tags should be selected), intersectionIntra should be set to False. Else, they will be connected with AND (meaning that only documents having all of these tags should be selected). 
+intersectionInter: intersectionInter defines how tag sets of different categories are to be connected. If set to True, documents must match all of the specified categories, if set to False, they only need to match any of the given categories.
+```
+Example: ...
 
-Example:
-
-Possible operations are 
-- select:
-- sample:
-- createLinks:
-
+```
+select: command for selecting documents
+sample (optional): create a random sample of the given size from all selected documents
+createLinks (optional): create symbolic links to the created sample on the filesystem (linux only!)
+```
 
 Create a subcorpus with given specifications
 ---------------------------------------------
