@@ -52,8 +52,7 @@ class daraJsonParser:
         
     
 if __name__=="__main__":
-    parser = daraJsonParser("./dara_datasets_with_oecd.json",\
-    ".daraTitles.csv")
+    parser = daraJsonParser(sys.argv[1], "./daraTitles.csv")
     parser.writeTitlesToCsv()
     
     cc = stpCommandCreator("./stpCall.json")
