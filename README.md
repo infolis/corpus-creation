@@ -21,7 +21,7 @@ python ssoarMetaFileFormatter.py <metaDir> <targetDir>
 ```
 metaDir: path to the metadata dump, e.g. ./ssoar_harvested_meta
 
-targetDir: path to the converted metadata dump, e.g. ./ssoar_meta
+targetDir: path to the converted metadata dump, e.g. ./ssoar_meta. Directory must exist.
 ```
 
 Parse metadata and write to an index
@@ -42,7 +42,7 @@ logFile: path to a file to use as log, e.g. ./metaIndexer.log
 
 metaDir: path to the metadata dump, e.g. ./ssoar_meta
 
-targetFile: path to a file to use as index, e.g. ./ssoarMetadata.pickle
+targetFile: path to a file to use as index, e.g. ./ssoarMetadata.pickle. Directory must exist.
 ```
 
 Create a json file specifying which documents from the corpus to select and which actions to perform on them
