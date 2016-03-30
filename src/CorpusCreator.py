@@ -62,12 +62,25 @@ class CorpusCreator():
     def union(self, nestedList):
         return list(set.union(*map(set, nestedList)))
     
+    def addFilenamesHavingTagPrefix(self, tags, dictionary, matchList):
+        tagList = dictionary.keys()
+        for tagToSearch in tags:
+            tagToSearch = tagToSearch.encode("utf-8")
+            if tagToSearch.endswith("*"):
+                print "Found prefix query: " + tagToSearch
+                for tag in tagList:
+                    if tag.startswith(tagToSearch.replace("*","")):
+                        print "Found matching tag: " + tag
+                        matchList.append(dictionary.get(tag))
+        return matchList
+        
     def getFilenamesHavingTags(self, tags, dictionary, function):
-        matchList = [dictionary.get(tag.encode("utf-8")) for tag in tags]            
+        matchList = [dictionary.get(tag.encode("utf-8")) for tag in tags if tag.encode("utf-8") in dictionary]
+        matchList = self.addFilenamesHavingTagPrefix(tags, dictionary, matchList)
         return function(matchList)
           
     def select(self):
-        """Select all filenames having the specified tags. 
+        """Select all filenames having the specified tags or tag prefixes. 
         If intersection flag is set (default), only entries having all specified
         tags are returned. Else, a union of entries having at least one of the 
         tags is returned. Intra: applies to tags inside of one category, 
